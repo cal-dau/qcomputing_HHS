@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quantum Computing — The Next Frontier</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #040d1a;
+    --deep: #071428;
+    --blue: #0a2040;
+    --accent: #c0392b;
+    --red-glow: #e74c3c;
+    --red-light: #ff6b5b;
+    --cyan: #00c8ff;
+    --grid: rgba(0,200,255,0.04);
+    --text: #d6e4f7;
+    --muted: #7a9ab8;
+    --border: rgba(0,200,255,0.15);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--navy);
+    color: var(--text);
+    font-family: 'Space Mono', monospace;
+    overflow-x: hidden;
+    line-height: 1.7;
+  }
+
+  /* ─── GRID OVERLAY ─── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.2rem 4rem;
+    background: rgba(4,13,26,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.1rem;
+    color: var(--cyan);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .nav-logo span { color: var(--red-glow); }
+
+  nav ul {
+    list-style: none;
+    display: flex;
+    gap: 2.5rem;
+  }
+
+  nav a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+
+  nav a:hover { color: var(--cyan); }
+
+  /* ─── HERO ─── */
+  #hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 8rem 2rem 4rem;
+    overflow: hidden;
+  }
+
+  /* Orbiting rings */
+  .orbit-ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid;
+    animation: spin linear infinite;
+    pointer-events: none;
+  }
+  .orbit-ring:nth-child(1) {
+    width: 500px; height: 500px;
+    border-color: rgba(0,200,255,0.12);
+    animation-duration: 30s;
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%) rotateX(70deg);
+  }
+  .orbit-ring:nth-child(2) {
+    width: 700px; height: 700px;
+    border-color: rgba(231,76,60,0.08);
+    animation-duration: 50s;
+    animation-direction: reverse;
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%) rotateX(70deg) rotateZ(40deg);
+  }
+  .orbit-ring:nth-child(3) {
+    width: 900px; height: 900px;
+    border-color: rgba(0,200,255,0.06);
+    animation-duration: 70s;
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%) rotateX(70deg) rotateZ(-30deg);
+  }
+
+  @keyframes spin { to { transform: translate(-50%,-50%) rotateX(70deg) rotateZ(360deg); } }
+
+  /* Core atom */
+  .atom-core {
+    position: absolute;
+    width: 120px; height: 120px;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(circle, rgba(0,200,255,0.3) 0%, rgba(0,200,255,0.05) 60%, transparent 70%);
+    border-radius: 50%;
+    animation: pulse 3s ease-in-out infinite;
+    pointer-events: none;
+  }
+
+  @keyframes pulse {
+    0%, 100% { transform: translate(-50%,-50%) scale(1); opacity: 0.8; }
+    50% { transform: translate(-50%,-50%) scale(1.3); opacity: 1; }
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero-eyebrow {
+    display: inline-block;
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--red-glow);
+    border: 1px solid rgba(231,76,60,0.4);
+    padding: 0.4rem 1.2rem;
+    margin-bottom: 2rem;
+    animation: fadeUp 0.8s ease both;
+  }
+
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(3rem, 8vw, 7rem);
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    color: #fff;
+    animation: fadeUp 0.8s 0.15s ease both;
+  }
+
+  h1 .accent { color: var(--cyan); }
+  h1 .red { color: var(--red-glow); }
+
+  .hero-sub {
+    max-width: 560px;
+    margin: 2rem auto 0;
+    color: var(--muted);
+    font-size: 0.85rem;
+    line-height: 1.9;
+    animation: fadeUp 0.8s 0.3s ease both;
+  }
+
+  .hero-cta {
+    display: inline-flex;
+    gap: 1rem;
+    margin-top: 3rem;
+    animation: fadeUp 0.8s 0.45s ease both;
+  }
+
+  .btn {
+    display: inline-block;
+    padding: 0.85rem 2rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: 2px;
+    transition: all 0.25s;
+    cursor: pointer;
+  }
+
+  .btn-primary {
+    background: var(--red-glow);
+    color: #fff;
+    border: 1px solid var(--red-glow);
+  }
+  .btn-primary:hover { background: var(--red-light); box-shadow: 0 0 24px rgba(231,76,60,0.5); }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--cyan);
+    border: 1px solid var(--border);
+  }
+  .btn-ghost:hover { border-color: var(--cyan); box-shadow: 0 0 20px rgba(0,200,255,0.15); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ─── SECTIONS ─── */
+  section {
+    position: relative;
+    z-index: 1;
+    padding: 7rem 4rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--red-glow);
+    margin-bottom: 1.5rem;
+  }
+
+  .section-label::before {
+    content: '';
+    display: block;
+    width: 30px; height: 1px;
+    background: var(--red-glow);
+  }
+
+  h2 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    line-height: 1.1;
+    color: #fff;
+    margin-bottom: 1.5rem;
+  }
+
+  h2 .hl { color: var(--cyan); }
+
+  p { color: var(--muted); font-size: 0.875rem; line-height: 1.9; margin-bottom: 1rem; }
+
+  /* ─── WHAT IS ─── */
+  #what {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: center;
+    padding-top: 0;
+    padding-bottom: 7rem;
+  }
+
+  #what::before {
+    content: '';
+    position: absolute;
+    top: -2px; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+  }
+
+  .qubit-vis {
+    position: relative;
+    height: 340px;
+  }
+
+  .bloch-sphere {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    width: 220px; height: 220px;
+    border-radius: 50%;
+    border: 1px solid rgba(0,200,255,0.2);
+    background: radial-gradient(ellipse at 35% 35%, rgba(0,200,255,0.12), rgba(4,13,26,0.8));
+    box-shadow: 0 0 60px rgba(0,200,255,0.08), inset 0 0 40px rgba(0,200,255,0.05);
+  }
+
+  .bloch-axis {
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 1px;
+    height: 240px;
+    transform: translate(-50%, -50%);
+    background: linear-gradient(to bottom, transparent, rgba(0,200,255,0.5), transparent);
+  }
+
+  .bloch-axis-h {
+    position: absolute;
+    top: 50%; left: 50%;
+    height: 1px;
+    width: 240px;
+    transform: translate(-50%, -50%);
+    background: linear-gradient(to right, transparent, rgba(0,200,255,0.3), transparent);
+  }
+
+  .state-arrow {
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 3px;
+    height: 100px;
+    transform-origin: bottom center;
+    transform: translate(-50%, -100%) rotate(35deg);
+    background: linear-gradient(to top, var(--red-glow), var(--red-light));
+    border-radius: 2px;
+    animation: wobble 4s ease-in-out infinite;
+  }
+
+  .state-arrow::after {
+    content: '|ψ⟩';
+    position: absolute;
+    top: -1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.8rem;
+    color: var(--red-light);
+    white-space: nowrap;
+  }
+
+  @keyframes wobble {
+    0%, 100% { transform: translate(-50%, -100%) rotate(35deg); }
+    50% { transform: translate(-50%, -100%) rotate(-20deg); }
+  }
+
+  .pole-label {
+    position: absolute;
+    font-size: 0.7rem;
+    color: var(--cyan);
+    letter-spacing: 0.1em;
+  }
+  .pole-label.top { top: 10%; left: 50%; transform: translateX(-50%); }
+  .pole-label.bot { bottom: 10%; left: 50%; transform: translateX(-50%); }
+
+  /* ─── CONCEPTS ─── */
+  #concepts { padding-top: 7rem; }
+
+  .concepts-intro { max-width: 600px; margin-bottom: 4rem; }
+
+  .concept-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+  }
+
+  .concept-card {
+    background: var(--deep);
+    border: 1px solid var(--border);
+    padding: 3rem;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s, transform 0.3s;
+  }
+
+  .concept-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px; height: 100%;
+    background: var(--red-glow);
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: transform 0.4s ease;
+  }
+
+  .concept-card:hover { border-color: rgba(0,200,255,0.3); transform: translateY(-4px); }
+  .concept-card:hover::before { transform: scaleY(1); }
+
+  .concept-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+    display: block;
+  }
+
+  .concept-card h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 0.5rem;
+  }
+
+  .concept-tag {
+    display: inline-block;
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--cyan);
+    border: 1px solid var(--border);
+    padding: 0.2rem 0.6rem;
+    margin-bottom: 1.2rem;
+  }
+
+  /* ─── APPLICATIONS ─── */
+  #applications { padding-top: 7rem; }
+
+  .apps-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 3rem;
+  }
+
+  .app-card {
+    background: linear-gradient(135deg, var(--deep), var(--blue));
+    border: 1px solid var(--border);
+    padding: 2.5rem 2rem;
+    border-radius: 2px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s;
+  }
+
+  .app-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--red-glow), var(--cyan));
+    transform: scaleX(0);
+    transition: transform 0.4s ease;
+  }
+
+  .app-card:hover { transform: translateY(-6px); box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+  .app-card:hover::after { transform: scaleX(1); }
+
+  .app-number {
+    font-size: 3rem;
+    font-weight: 700;
+    color: rgba(0,200,255,0.08);
+    font-family: 'Syne', sans-serif;
+    line-height: 1;
+    margin-bottom: 1rem;
+  }
+
+  .app-card h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 0.75rem;
+  }
+
+  /* ─── ALABAMA ─── */
+  #alabama {
+    padding-top: 7rem;
+  }
+
+  .alabama-inner {
+    background: linear-gradient(135deg, rgba(192,57,43,0.08), rgba(7,20,40,0.95));
+    border: 1px solid rgba(192,57,43,0.3);
+    padding: 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .alabama-inner::before {
+    content: 'ALABAMA';
+    position: absolute;
+    right: -2rem;
+    top: 50%;
+    transform: translateY(-50%) rotate(90deg);
+    font-family: 'Syne', sans-serif;
+    font-size: 8rem;
+    font-weight: 800;
+    color: rgba(192,57,43,0.06);
+    letter-spacing: 0.1em;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+
+  .alabama-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    position: relative;
+  }
+
+  .al-item {
+    border-left: 2px solid rgba(231,76,60,0.4);
+    padding-left: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .al-item h4 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--red-light);
+    margin-bottom: 0.5rem;
+  }
+
+  /* ─── RESOURCES ─── */
+  #resources { padding-top: 7rem; padding-bottom: 8rem; }
+
+  .resources-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    margin-top: 3rem;
+  }
+
+  .resource-link {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    background: var(--deep);
+    border: 1px solid var(--border);
+    padding: 1.5rem 2rem;
+    text-decoration: none;
+    transition: all 0.25s;
+    group: true;
+  }
+
+  .resource-link:hover {
+    border-color: var(--cyan);
+    background: rgba(0,200,255,0.04);
+    transform: translateX(6px);
+  }
+
+  .resource-icon {
+    width: 44px; height: 44px;
+    flex-shrink: 0;
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    color: var(--cyan);
+    transition: border-color 0.25s, background 0.25s;
+  }
+
+  .resource-link:hover .resource-icon {
+    border-color: var(--cyan);
+    background: rgba(0,200,255,0.1);
+  }
+
+  .resource-text h4 {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 0.25rem;
+  }
+
+  .resource-text p {
+    font-size: 0.72rem;
+    color: var(--muted);
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  .resource-arrow {
+    margin-left: auto;
+    color: var(--muted);
+    font-size: 1.2rem;
+    transition: transform 0.25s, color 0.25s;
+  }
+
+  .resource-link:hover .resource-arrow {
+    transform: translateX(4px);
+    color: var(--cyan);
+  }
+
+  /* ─── DIVIDER ─── */
+  .divider {
+    max-width: 1200px;
+    margin: 0 auto;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+  }
+
+  /* ─── FOOTER ─── */
+  footer {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 2.5rem;
+    font-size: 0.68rem;
+    color: rgba(122,154,184,0.5);
+    letter-spacing: 0.1em;
+    border-top: 1px solid var(--border);
+  }
+
+  footer span { color: var(--red-glow); }
+
+  /* ─── SCROLL REVEAL ─── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ─── STAT BAND ─── */
+  .stat-band {
+    background: var(--deep);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 3rem 4rem;
+    display: flex;
+    justify-content: space-around;
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+  }
+
+  .stat-band::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 100px,
+      rgba(0,200,255,0.02) 100px,
+      rgba(0,200,255,0.02) 101px
+    );
+  }
+
+  .stat-item { text-align: center; position: relative; }
+
+  .stat-number {
+    font-family: 'Syne', sans-serif;
+    font-size: 3.5rem;
+    font-weight: 800;
+    color: var(--cyan);
+    line-height: 1;
+    display: block;
+  }
+
+  .stat-label {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    margin-top: 0.5rem;
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 768px) {
+    nav { padding: 1rem 1.5rem; }
+    nav ul { display: none; }
+    section { padding: 4rem 1.5rem; }
+    #what { grid-template-columns: 1fr; gap: 3rem; }
+    .concept-grid { grid-template-columns: 1fr; }
+    .apps-grid { grid-template-columns: 1fr; }
+    .alabama-grid { grid-template-columns: 1fr; gap: 2rem; }
+    .resources-grid { grid-template-columns: 1fr; }
+    .stat-band { flex-direction: column; gap: 2rem; padding: 3rem 2rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Quantum<span>AL</span></div>
+  <ul>
+    <li><a href="#what">Basics</a></li>
+    <li><a href="#concepts">Concepts</a></li>
+    <li><a href="#applications">Applications</a></li>
+    <li><a href="#alabama">Alabama</a></li>
+    <li><a href="#resources">Resources</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero" style="max-width:100%; padding-left:2rem; padding-right:2rem;">
+  <div class="orbit-ring"></div>
+  <div class="orbit-ring"></div>
+  <div class="orbit-ring"></div>
+  <div class="atom-core"></div>
+
+  <div class="hero-content">
+    <div class="hero-eyebrow">The Future of Computation</div>
+    <h1>
+      Quantum<br>
+      <span class="accent">Com</span><span class="red">puting</span>
+    </h1>
+    <p class="hero-sub">
+      Harnessing the strange laws of quantum mechanics to solve problems 
+      that would take classical computers longer than the age of the universe.
+    </p>
+    <div class="hero-cta">
+      <a href="#what" class="btn btn-primary">Explore Now</a>
+      <a href="#resources" class="btn btn-ghost">Resources →</a>
+    </div>
+  </div>
+</section>
+
+<!-- STAT BAND -->
+<div class="stat-band reveal">
+  <div class="stat-item">
+    <span class="stat-number">10<sup style="font-size:1.5rem">58</sup></span>
+    <div class="stat-label">Classical bits to match 300 qubits</div>
+  </div>
+  <div class="stat-item">
+    <span class="stat-number">1947</span>
+    <div class="stat-label">Year quantum theory was formalized</div>
+  </div>
+  <div class="stat-item">
+    <span class="stat-number">&lt;1°K</span>
+    <div class="stat-label">Temp of quantum processors</div>
+  </div>
+  <div class="stat-item">
+    <span class="stat-number">∞</span>
+    <div class="stat-label">Potential problem space</div>
+  </div>
+</div>
+
+<!-- WHAT IS QUANTUM COMPUTING -->
+<div style="max-width:1200px; margin:0 auto;">
+  <section id="what" class="reveal">
+    <div>
+      <div class="section-label">01 — Foundation</div>
+      <h2>What is <span class="hl">Quantum</span><br>Computing?</h2>
+      <p>
+        Classical computers store data as bits — binary switches that are either 0 or 1. 
+        Quantum computers use <strong style="color:#fff">qubits</strong>, which exploit quantum mechanical phenomena 
+        to represent and process information in fundamentally new ways.
+      </p>
+      <p>
+        Where a classical computer evaluates one path at a time, a quantum computer can 
+        explore many computational paths simultaneously, making certain classes of problems 
+        tractable that would otherwise require astronomical computation time.
+      </p>
+      <p>
+        The key insight: nature at its smallest scales follows rules so different from our 
+        everyday experience that they enable an entirely new kind of computing machine — one 
+        that thinks in <strong style="color:var(--cyan)">probabilities, interference, and entanglement</strong>.
+      </p>
+      <p style="margin-top:2rem;">
+        Quantum computers are not simply faster classical computers. They excel at specific 
+        problem types — optimization, simulation, cryptography — while classical machines 
+        remain superior for most everyday tasks.
+      </p>
+    </div>
+
+    <div class="qubit-vis">
+      <div class="bloch-sphere"></div>
+      <div class="bloch-axis"></div>
+      <div class="bloch-axis-h"></div>
+      <div class="state-arrow"></div>
+      <div class="pole-label top">|0⟩</div>
+      <div class="pole-label bot">|1⟩</div>
+    </div>
+  </section>
+</div>
+
+<div class="divider"></div>
+
+<!-- CONCEPTS -->
+<div style="max-width:1200px; margin:0 auto;">
+  <section id="concepts" class="reveal">
+    <div class="concepts-intro">
+      <div class="section-label">02 — Key Concepts</div>
+      <h2>The Building<br><span class="hl">Blocks</span></h2>
+      <p>Four foundational phenomena make quantum computing possible. Understanding these unlocks the logic behind the machines.</p>
+    </div>
+
+    <div class="concept-grid">
+
+      <div class="concept-card">
+        <span class="concept-icon">⚛️</span>
+        <div class="concept-tag">Core Principle</div>
+        <h3>Superposition</h3>
+        <p>
+          A qubit can exist as 0, 1, or <em style="color:#fff">any combination of both simultaneously</em> until measured. 
+          This is not merely metaphorical — the qubit physically occupies multiple states at once, 
+          allowing a quantum processor with n qubits to represent 2ⁿ states in parallel.
+        </p>
+        <p>
+          Think of it like a coin spinning in the air: it is neither heads nor tails until it lands. 
+          Quantum computation happens while the coin is still spinning.
+        </p>
+      </div>
+
+      <div class="concept-card">
+        <span class="concept-icon">🔗</span>
+        <div class="concept-tag">Quantum Correlation</div>
+        <h3>Entanglement</h3>
+        <p>
+          Two qubits can become entangled — their quantum states linked regardless of the physical 
+          distance between them. Measuring one instantly determines the state of the other, 
+          a phenomenon Einstein famously called <em style="color:#fff">"spooky action at a distance."</em>
+        </p>
+        <p>
+          Entanglement allows quantum computers to coordinate information across qubits in ways 
+          classical systems fundamentally cannot replicate, exponentially increasing computational power.
+        </p>
+      </div>
+
+      <div class="concept-card">
+        <span class="concept-icon">〰️</span>
+        <div class="concept-tag">Wave Mechanics</div>
+        <h3>Interference</h3>
+        <p>
+          Like waves in water, quantum probability amplitudes can add together or cancel each other out. 
+          Quantum algorithms are carefully designed to amplify the probability of correct answers 
+          and suppress wrong ones through constructive and destructive interference.
+        </p>
+        <p>
+          Without interference, a quantum computer's output would be random noise. It is the 
+          precision engineering of interference that turns superposition into useful computation.
+        </p>
+      </div>
+
+      <div class="concept-card">
+        <span class="concept-icon">📦</span>
+        <div class="concept-tag">Measurement Theory</div>
+        <h3>Decoherence & Measurement</h3>
+        <p>
+          When a qubit is measured or interacts with its environment, its quantum state 
+          <em style="color:#fff">collapses</em> into a definite classical value. Decoherence — unwanted 
+          environmental interactions — is the primary engineering challenge of quantum computing.
+        </p>
+        <p>
+          Current quantum processors operate near absolute zero (−273°C) and are shielded from 
+          vibration, radiation, and electromagnetic noise to preserve quantum states long enough 
+          to complete computations.
+        </p>
+      </div>
+
+    </div>
+  </section>
+</div>
+
+<div class="divider"></div>
+
+<!-- APPLICATIONS -->
+<div style="max-width:1200px; margin:0 auto;">
+  <section id="applications" class="reveal">
+    <div class="section-label">03 — Real-World Impact</div>
+    <h2>Where Quantum<br><span class="hl">Changes Everything</span></h2>
+    <p style="max-width:600px;">
+      Quantum advantage is emerging across industries where classical computation reaches its limits. 
+      These are the fields where the impact will first be felt.
+    </p>
+
+    <div class="apps-grid">
+
+      <div class="app-card">
+        <div class="app-number">01</div>
+        <h3>Drug Discovery & Medicine</h3>
+        <p>Simulating molecular interactions at quantum scale to design new drugs and materials. 
+        What takes years on classical supercomputers could take hours — potentially 
+        revolutionizing treatment for diseases like Alzheimer's and cancer.</p>
+      </div>
+
+      <div class="app-card">
+        <div class="app-number">02</div>
+        <h3>Cryptography & Security</h3>
+        <p>Quantum computers will eventually break RSA encryption. Quantum key distribution (QKD) 
+        offers theoretically unbreakable encryption — any eavesdropping disturbs the quantum 
+        state, making interception detectable by the laws of physics.</p>
+      </div>
+
+      <div class="app-card">
+        <div class="app-number">03</div>
+        <h3>Climate & Energy</h3>
+        <p>Optimizing electrical grids, modeling climate systems, and designing next-generation 
+        batteries and solar cells. Quantum simulation of the nitrogen fixation process could 
+        unlock room-temperature superconductors and reduce fertilizer energy costs by 2%.</p>
+      </div>
+
+      <div class="app-card">
+        <div class="app-number">04</div>
+        <h3>Financial Modeling</h3>
+        <p>Portfolio optimization, risk analysis, and fraud detection across billions of 
+        transactions. Quantum algorithms like Monte Carlo can price complex derivatives and 
+        model market scenarios exponentially faster than today's methods.</p>
+      </div>
+
+      <div class="app-card">
+        <div class="app-number">05</div>
+        <h3>Artificial Intelligence</h3>
+        <p>Quantum machine learning algorithms promise to speed up training and inference on 
+        massive datasets. Quantum neural networks may unlock pattern recognition capabilities 
+        far beyond current AI, particularly in unstructured data analysis.</p>
+      </div>
+
+      <div class="app-card">
+        <div class="app-number">06</div>
+        <h3>Logistics & Supply Chain</h3>
+        <p>The "traveling salesman" class of optimization problems — routing, scheduling, 
+        resource allocation — grows exponentially hard for classical computers. Quantum 
+        annealing and QAOA algorithms tackle these directly, saving billions annually.</p>
+      </div>
+
+    </div>
+  </section>
+</div>
+
+<div class="divider"></div>
+
+<!-- ALABAMA -->
+<div style="max-width:1200px; margin:0 auto;">
+  <section id="alabama" class="reveal" style="padding-bottom:7rem;">
+    <div class="section-label">04 — Local Connections</div>
+    <h2>Quantum in <span class="red" style="color:var(--red-glow)">Alabama</span></h2>
+    <p style="max-width:560px; margin-bottom:3rem;">
+      Alabama is not on the sidelines of the quantum revolution. 
+      Research institutions, federal agencies, and defense contractors across the state 
+      are deeply embedded in the quantum computing ecosystem.
+    </p>
+
+    <div class="alabama-inner">
+      <div class="alabama-grid">
+        <div>
+          <div class="al-item">
+            <h4>University of Alabama in Huntsville (UAH)</h4>
+            <p>UAH's physics and engineering departments conduct research in quantum optics, 
+            quantum sensing, and quantum communication. The university partners with nearby 
+            federal agencies on emerging quantum technologies.</p>
+          </div>
+          <div class="al-item">
+            <h4>NASA Marshall Space Flight Center</h4>
+            <p>Located in Huntsville, Marshall explores quantum computing for aerospace 
+            applications including trajectory optimization, propulsion simulation, and 
+            next-generation sensor development for deep space missions.</p>
+          </div>
+          <div class="al-item">
+            <h4>Redstone Arsenal & DEVCOM</h4>
+            <p>The Army's Combat Capabilities Development Command at Redstone Arsenal 
+            investigates quantum sensing and quantum-resistant cryptography for 
+            national defense applications and secure military communications.</p>
+          </div>
+        </div>
+        <div>
+          <div class="al-item">
+            <h4>University of Alabama (Tuscaloosa)</h4>
+            <p>UA researchers work in quantum materials and condensed matter physics, 
+            contributing to the theoretical foundations of topological qubits and 
+            novel quantum hardware architectures.</p>
+          </div>
+          <div class="al-item">
+            <h4>Auburn University</h4>
+            <p>Auburn's Samuel Ginn College of Engineering includes research in quantum 
+            information science, quantum error correction, and quantum photonics, 
+            preparing the next generation of quantum engineers.</p>
+          </div>
+          <div class="al-item">
+            <h4>Alabama Supercomputer Authority</h4>
+            <p>The ASA provides high-performance computing resources to Alabama 
+            universities and industry, and is actively evaluating quantum-classical 
+            hybrid workflows to extend its capabilities for researchers statewide.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="divider"></div>
+
+<!-- RESOURCES -->
+<div style="max-width:1200px; margin:0 auto;">
+  <section id="resources" class="reveal">
+    <div class="section-label">05 — Go Deeper</div>
+    <h2>Learn More &<br><span class="hl">Resources</span></h2>
+    <p style="max-width:560px;">
+      The best introductions to quantum computing span textbooks, online courses, 
+      and direct experimentation. These resources serve every level of background.
+    </p>
+
+    <div class="resources-grid">
+
+      <a href="#" class="resource-link">
+        <div class="resource-icon">📘</div>
+        <div class="resource-text">
+          <h4>IBM Quantum Learning</h4>
+          <p>Free courses from introductory to advanced. Write real quantum circuits on IBM's cloud quantum processors.</p>
+        </div>
+        <div class="resource-arrow">→</div>
+      </a>
+
+      <a href="#" class="resource-link">
+        <div class="resource-icon">🔬</div>
+        <div class="resource-text">
+          <h4>Google Quantum AI</h4>
+          <p>Research papers, tools, and open-source frameworks from Google's quantum computing team.</p>
+        </div>
+        <div class="resource-arrow">→</div>
+      </a>
+
+      <a href="#" class="resource-link">
+        <div class="resource-icon">🎓</div>
+        <div class="resource-text">
+          <h4>MIT OpenCourseWare — Quantum Physics</h4>
+          <p>Full lecture videos and problem sets from MIT's introductory quantum mechanics courses.</p>
+        </div>
+        <div class="resource-arrow">→</div>
+      </a>
+
+      <a href="#" class="resource-link">
+        <div class="resource-icon">📗</div>
+        <div class="resource-text">
+          <h4>Nielsen & Chuang Textbook</h4>
+          <p>"Quantum Computation and Quantum Information" — the definitive reference text for the field.</p>
+        </div>
+        <div class="resource-arrow">→</div>
+      </a>
+
+      <a href="#" class="resource-link">
+        <div class="resource-icon">⚙️</div>
+        <div class="resource-text">
+          <h4>Qiskit — Open Source SDK</h4>
+          <p>IBM's open-source Python framework for quantum computing. Write, simulate, and run quantum circuits.</p>
+        </div>
+        <div class="resource-arrow">→</div>
+      </a>
+
+      <a href="#" class="resource-link">
+        <div class="resource-icon">🏛️</div>
+        <div class="resource-text">
+          <h4>National Quantum Initiative</h4>
+          <p>The U.S. government's strategic plan for quantum R&D, with resources for researchers and students.</p>
+        </div>
+        <div class="resource-arrow">→</div>
+      </a>
+
+      <a href="#" class="resource-link">
+        <div class="resource-icon">🌐</div>
+        <div class="resource-text">
+          <h4>Quantum Computing Report</h4>
+          <p>Industry news, hardware comparisons, and business analysis of the quantum computing landscape.</p>
+        </div>
+        <div class="resource-arrow">→</div>
+      </a>
+
+      <a href="#" class="resource-link">
+        <div class="resource-icon">🎥</div>
+        <div class="resource-text">
+          <h4>3Blue1Brown — Quantum Intuition</h4>
+          <p>Beautifully animated visual explainers on quantum mechanics fundamentals for general audiences.</p>
+        </div>
+        <div class="resource-arrow">→</div>
+      </a>
+
+    </div>
+  </section>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  Built for curiosity · Alabama, USA · Quantum Computing is the future — <span>the future is now</span>
+</footer>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+
+  // Active nav highlight
+  const sections = document.querySelectorAll('section[id], div[id]');
+  const navLinks = document.querySelectorAll('nav a');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(sec => {
+      if (window.scrollY >= sec.offsetTop - 200) current = sec.id;
+    });
+    navLinks.forEach(link => {
+      link.style.color = link.getAttribute('href') === '#' + current
+        ? 'var(--cyan)' : '';
+    });
+  });
+</script>
+</body>
+</html>
