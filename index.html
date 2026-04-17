@@ -664,6 +664,161 @@
     margin-top: 0.5rem;
   }
 
+  /* ─── PODCAST ─── */
+  #podcast {
+    padding-top: 7rem;
+    padding-bottom: 7rem;
+  }
+
+  .podcast-player {
+    margin-top: 3rem;
+    background: linear-gradient(135deg, var(--deep), rgba(192,57,43,0.06));
+    border: 1px solid var(--border);
+    padding: 3rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .podcast-player::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 3px;
+    background: linear-gradient(90deg, var(--red-glow), var(--cyan), var(--red-glow));
+    background-size: 200% 100%;
+    animation: shimmer 3s linear infinite;
+  }
+
+  @keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
+  .podcast-header {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .podcast-art {
+    width: 80px; height: 80px;
+    flex-shrink: 0;
+    background: radial-gradient(135deg at 30% 30%, rgba(0,200,255,0.25), rgba(192,57,43,0.2));
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .podcast-art::after {
+    content: '';
+    position: absolute;
+    inset: 8px;
+    border-radius: 50%;
+    border: 1px solid rgba(0,200,255,0.3);
+  }
+
+  .podcast-meta h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 0.35rem;
+  }
+
+  .podcast-meta .pod-source {
+    font-size: 0.68rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--red-light);
+  }
+
+  .podcast-meta .pod-desc {
+    font-size: 0.78rem;
+    color: var(--muted);
+    margin-top: 0.4rem;
+    margin-bottom: 0;
+  }
+
+  .audio-wrap audio {
+    width: 100%;
+    height: 48px;
+    border-radius: 2px;
+    outline: none;
+    filter: hue-rotate(200deg) saturate(1.2) brightness(0.95);
+  }
+
+  /* Custom audio styling overlay */
+  .audio-wrap {
+    background: rgba(0,0,0,0.3);
+    border: 1px solid var(--border);
+    padding: 1rem 1.5rem;
+    border-radius: 2px;
+  }
+
+  .audio-label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+  }
+
+  .audio-label span {
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .audio-label .live-dot {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--red-light);
+  }
+
+  .live-dot::before {
+    content: '';
+    width: 6px; height: 6px;
+    background: var(--red-glow);
+    border-radius: 50%;
+    animation: blink 1.5s ease-in-out infinite;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.2; }
+  }
+
+  .waveform {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    height: 32px;
+    margin-bottom: 1rem;
+    pointer-events: none;
+  }
+
+  .waveform-bar {
+    flex: 1;
+    background: rgba(0,200,255,0.25);
+    border-radius: 1px;
+    animation: wave var(--d, 1s) ease-in-out infinite alternate;
+    animation-delay: var(--delay, 0s);
+  }
+
+  @keyframes wave {
+    from { height: 20%; }
+    to   { height: 100%; }
+  }
+
   /* ─── RESPONSIVE ─── */
   @media (max-width: 768px) {
     nav { padding: 1rem 1.5rem; }
@@ -688,6 +843,7 @@
     <li><a href="#concepts">Concepts</a></li>
     <li><a href="#applications">Applications</a></li>
     <li><a href="#alabama">Alabama</a></li>
+    <li><a href="#podcast">Podcast</a></li>
     <li><a href="#resources">Resources</a></li>
   </ul>
 </nav>
@@ -981,10 +1137,47 @@
 
 <div class="divider"></div>
 
+<!-- PODCAST -->
+<div style="max-width:1200px; margin:0 auto;">
+  <section id="podcast" class="reveal">
+    <div class="section-label">05 — Listen</div>
+    <h2>NotebookLM <span class="hl">Podcast</span></h2>
+    <p style="max-width:580px;">
+      An AI-generated deep dive into one of quantum computing's most consequential implications —
+      what happens to encryption when quantum machines arrive?
+    </p>
+
+    <div class="podcast-player">
+      <div class="podcast-header">
+        <div class="podcast-art">🎙️</div>
+        <div class="podcast-meta">
+          <h3>Cracking All Encryption in Nine Minutes</h3>
+          <div class="pod-source">NotebookLM · AI-Generated Podcast</div>
+          <p class="pod-desc">A deep-dive exploration of quantum computing's threat to modern cryptography — and what comes next.</p>
+        </div>
+      </div>
+
+      <div class="audio-wrap">
+        <div class="audio-label">
+          <span>Audio Player</span>
+          <div class="live-dot">Quantum Audio</div>
+        </div>
+        <div class="waveform" id="waveform"></div>
+        <audio controls preload="metadata">
+          <source src="Cracking_All_Encryption_in_Nine_Minutes.mp3" type="audio/mp3">
+          Your browser does not support the audio element.
+        </audio>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="divider"></div>
+
 <!-- RESOURCES -->
 <div style="max-width:1200px; margin:0 auto;">
   <section id="resources" class="reveal">
-    <div class="section-label">05 — Go Deeper</div>
+    <div class="section-label">06 — Go Deeper</div>
     <h2>Learn More &<br><span class="hl">Resources</span></h2>
     <p style="max-width:560px;">
       The best introductions to quantum computing span textbooks, online courses, 
@@ -1086,7 +1279,33 @@
   }, { threshold: 0.1 });
   reveals.forEach(el => observer.observe(el));
 
-  // Active nav highlight
+  // Generate waveform bars
+  const waveform = document.getElementById('waveform');
+  if (waveform) {
+    for (let i = 0; i < 60; i++) {
+      const bar = document.createElement('div');
+      bar.className = 'waveform-bar';
+      const duration = (0.5 + Math.random() * 1.2).toFixed(2) + 's';
+      const delay = (Math.random() * -1.5).toFixed(2) + 's';
+      bar.style.cssText = `--d:${duration}; --delay:${delay}; height:${15 + Math.random()*85}%`;
+      waveform.appendChild(bar);
+    }
+  }
+
+  // Pause waveform animation when audio is paused
+  const audio = document.querySelector('audio');
+  if (audio) {
+    audio.addEventListener('play', () => {
+      document.querySelectorAll('.waveform-bar').forEach(b => b.style.animationPlayState = 'running');
+    });
+    audio.addEventListener('pause', () => {
+      document.querySelectorAll('.waveform-bar').forEach(b => b.style.animationPlayState = 'paused');
+    });
+    // Start paused
+    document.querySelectorAll('.waveform-bar').forEach(b => b.style.animationPlayState = 'paused');
+  }
+
+
   const sections = document.querySelectorAll('section[id], div[id]');
   const navLinks = document.querySelectorAll('nav a');
   window.addEventListener('scroll', () => {
